@@ -16,8 +16,8 @@ public class MyNetworkPlayer : NetworkBehaviour
     public event Action<ushort> OnPlayerHitCountChanged;
     public event Action<ushort> OnPlayerAttackCountChanged;
 
-    //// Players List to manage playerNumber
-    //static readonly List<Player> playersList = new List<Player>();
+    // Players List to manage playerNumber
+    static readonly List<MyNetworkPlayer> playersList = new List<MyNetworkPlayer>();
 
     [Header("Player UI")]
     public GameObject playerUIPrefab;
@@ -41,24 +41,24 @@ public class MyNetworkPlayer : NetworkBehaviour
     [SyncVar(hook = nameof(PlayerAttackCountChanged))]
     public ushort playerAttackCount = 0;
 
-    void PlayerNumberChanged(byte _, byte newPlayerNumber)
+    void PlayerNumberChanged(byte _, byte newData)
     {
-        OnPlayerNumberChanged?.Invoke(newPlayerNumber);
+        OnPlayerNumberChanged?.Invoke(newData);
     }
 
-    void PlayerColorChanged(Color32 _, Color32 newPlayerColor)
+    void PlayerColorChanged(Color32 _, Color32 newColor)
     {
-        OnPlayerColorChanged?.Invoke(newPlayerColor);
+        OnPlayerColorChanged?.Invoke(newColor);
     }
 
-    void PlayerHitCountChanged(ushort _, ushort newPlayerHitCount)
+    void PlayerHitCountChanged(ushort _, ushort newData)
     {
-        OnPlayerHitCountChanged?.Invoke(newPlayerHitCount);
+        OnPlayerHitCountChanged?.Invoke(newData);
     }
 
-    void PlayerAttackCountChanged(ushort _, ushort newPlayerAttackCount)
+    void PlayerAttackCountChanged(ushort _, ushort newData)
     {
-        OnPlayerAttackCountChanged?.Invoke(newPlayerAttackCount);
+        OnPlayerAttackCountChanged?.Invoke(newData);
     }
 
     #endregion
@@ -68,7 +68,7 @@ public class MyNetworkPlayer : NetworkBehaviour
     public override void OnStartServer()
     {
         //// Add this to the static Players List
-        //playersList.Add(this);
+        playersList.Add(this);
 
         // set the Player Color SyncVar
         playerColor = Random.ColorHSV(0f, 1f, 0.9f, 0.9f, 1f, 1f);
@@ -78,9 +78,17 @@ public class MyNetworkPlayer : NetworkBehaviour
         playerAttackCount = 0;
     }
 
+    [ServerCallback]
+    internal static void ResetPlayerNumbers()
+    {
+        byte playerNumber = 0;
+        foreach (MyNetworkPlayer player in playersList)
+            player.playerNumber = playerNumber++;
+    }
+
     public override void OnStopServer()
     {
-        //playersList.Remove(this);
+        playersList.Remove(this);
     }
 
     #endregion
@@ -94,8 +102,8 @@ public class MyNetworkPlayer : NetworkBehaviour
         playerUI = playerUIObject.GetComponent<MyNetworkPlayerUI>();
 
         // wire up all events to handlers in PlayerUI
-        OnPlayerNumberChanged = playerUI.OnPlayerNumberChanged;
         OnPlayerColorChanged = playerUI.OnPlayerColorChanged;
+        OnPlayerNumberChanged = playerUI.OnPlayerNumberChanged;
         OnPlayerHitCountChanged = playerUI.OnPlayerHitCountChanged;
         OnPlayerAttackCountChanged = playerUI.OnPlayerAttackCountChanged;
 
@@ -108,17 +116,14 @@ public class MyNetworkPlayer : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
-        //// Set isLocalPlayer for this Player in UI for background shading
-        //playerUI.SetLocalPlayer();
-
-        //// Activate the main panel
-        //CanvasUI.SetActive(true);
-    }
+		// Activate the main panel
+		MyNetworkCanvasUI.SetActive(true);
+	}
 
     public override void OnStopLocalPlayer()
     {
-        //// Disable the main panel for local player
-        //CanvasUI.SetActive(false);
+        // Disable the main panel for local player
+        MyNetworkCanvasUI.SetActive(false);
     }
 
     public override void OnStopClient()

@@ -36,9 +36,9 @@ namespace NetworkUI
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
             base.OnServerAddPlayer(conn);
-            
+
             // 새로운 플레이어가 접속한 경우!
-            // Do Something - Ready를 푼다.
+            MyNetworkPlayer.ResetPlayerNumbers();
         }
 
         /// <summary>
@@ -49,9 +49,9 @@ namespace NetworkUI
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             base.OnServerDisconnect(conn);
-        
+
             // 플레이어 중 누군가 접속해제한 경우!
-            // Do Something - Player 번호를 갱신한다.
+            MyNetworkPlayer.ResetPlayerNumbers();
         }
     }
 }
