@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 639890313}
   - component: {fileID: 639890312}
+  - component: {fileID: 639890311}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -140,6 +141,39 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &639890311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639890310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!20 &639890312
 Camera:
   m_ObjectHideFlags: 0
@@ -262,8 +296,8 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 100
-  offlineScene: Assets/BaseResources/Mirror/Examples/Room/Scenes/OfflineScene.unity
-  onlineScene: Assets/BaseResources/Mirror/Examples/Room/Scenes/RoomScene.unity
+  offlineScene: Assets/WCH/1.Scene/Sam/OfflineScene_Sam.unity
+  onlineScene: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
   transport: {fileID: 2008127830}
   networkAddress: localhost
   maxConnections: 5
@@ -291,8 +325,8 @@ MonoBehaviour:
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: 114033720796874720, guid: deae2134a1d77704b9c595efe69767dd, type: 3}
-  RoomScene: Assets/BaseResources/Mirror/Examples/Room/Scenes/RoomScene.unity
-  GameplayScene: Assets/BaseResources/Mirror/Examples/Room/Scenes/OnlineScene.unity
+  RoomScene: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
+  GameplayScene: Assets/WCH/1.Scene/Sam/OnlineScene_Sam.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
@@ -325,3 +359,64 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 0
   offsetY: 0
+--- !u!1001 &2285758634572776693
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4503207206601742392, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: sceneId
+      value: 1219563271
+      objectReference: {fileID: 0}
+    - target: {fileID: 4606524525913940200, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_Name
+      value: AAA
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609938328530342682, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1edded8afeaf7614aba29e3b8a1e1776, type: 3}

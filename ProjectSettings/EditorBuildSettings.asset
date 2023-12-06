@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/WCH/1.Scene/Sam/OfflineScene_Sam.unity
+    guid: 5e059651ee31d104eafb6906789b72ba
+  - enabled: 1
+    path: Assets/WCH/1.Scene/Sam/OnlineScene_Sam.unity
+    guid: eb89b10cb83fbbd4ebf7dba59fbb12d5
+  - enabled: 1
+    path: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
+    guid: a66c9dd34b402fe489e2b6757ad4d08e
   m_configObjects: {}
