@@ -297,7 +297,7 @@ RectTransform:
   - {fileID: 1511002092}
   - {fileID: 1587031044}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1187,7 +1187,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   runInBackground: 1
   autoStartServerBuild: 1
-  autoConnectClientBuild: 0
+  autoConnectClientBuild: 1
   sendRate: 100
   offlineScene: Assets/WCH/1.Scene/Sam/OfflineScene_Sam.unity
   onlineScene: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
@@ -1236,7 +1236,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2008127833
 MonoBehaviour:
