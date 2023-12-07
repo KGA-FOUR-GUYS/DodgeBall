@@ -65,10 +65,10 @@ namespace NetworkRoom
         public override void OnStartClient()
         {
             // Instantiate the player UI as child of the Players Panel
-            globalUIObject = Instantiate(globalUIPrefab, MyNetworkCanvasUI.GetMainPanel());
+            globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
             globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
 
-            localUIObject = Instantiate(localUIPrefab, MyNetworkCanvasUI.GetPlayersPanel());
+            localUIObject = Instantiate(localUIPrefab, CanvasUIManager.GetPlayersPanel());
             localUIManager = localUIObject.GetComponent<LocalUIManager>();
 
             _globalDataManager.OnGameTimeChanged += globalUIManager.OnGlobalTimeValueChanged;
@@ -83,13 +83,13 @@ namespace NetworkRoom
         public override void OnStartLocalPlayer()
         {
             // Activate the main panel
-            MyNetworkCanvasUI.SetActive(true);
+            CanvasUIManager.SetActive(true);
         }
 
         public override void OnStopLocalPlayer()
         {
             // Deactivate the main panel
-            MyNetworkCanvasUI.SetActive(false);
+            CanvasUIManager.SetActive(false);
         }
 
         public override void OnStopClient()
