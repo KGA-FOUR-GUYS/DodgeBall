@@ -27,5 +27,6 @@ public class MyNetworkCanvasUI : MonoBehaviour
         Instance.mainPanel.gameObject.SetActive(active);
     }
 
+    public static RectTransform GetMainPanel() => Instance.mainPanel;
     public static RectTransform GetPlayersPanel() => Instance.playersPanel;
 }

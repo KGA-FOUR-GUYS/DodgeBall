@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2562260042804059686}
   - component: {fileID: 2562260042804059687}
-  - component: {fileID: 2562260042804059680}
+  - component: {fileID: 6218540311130209332}
+  - component: {fileID: 2213096522186785279}
+  - component: {fileID: 4226840220627512763}
   m_Layer: 0
-  m_Name: Network Player
+  m_Name: Network Player Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,11 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  _assetId: 2964382318
+  _assetId: 2581669229
   serverOnly: 0
   visible: 0
   hasSpawned: 0
---- !u!114 &2562260042804059680
+--- !u!114 &6218540311130209332
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,16 +60,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 2562260042804059685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4058eed62dd55f64096ede180d38cede, type: 3}
+  m_Script: {fileID: 11500000, guid: e9b3b0992538cc24fa602167114853aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
+  syncInterval: 0
+  globalUIPrefab: {fileID: 4512818627586254019, guid: 770b33d5ba8e8ba47b8481b76edf6000, type: 3}
+  localUIPrefab: {fileID: 4340924522358846974, guid: 3818f88b4dccc73429919e52be71e7b7, type: 3}
+--- !u!114 &2213096522186785279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2562260042804059685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d2ffb1131baef742b995c709f5a3927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+--- !u!114 &4226840220627512763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2562260042804059685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 387ac03e2bf9c1346b41a505956d0051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
   syncInterval: 0.1
-  playerUIPrefab: {fileID: 4340924522358846974, guid: 644fee7ff4820cf4785a63d30110b861, type: 3}
-  playerNumber: 0
-  playerColor:
+  number: 0
+  color:
     serializedVersion: 2
     rgba: 4294967295
-  playerHitCount: 0
-  playerAttackCount: 0
+  hitCount: 0
+  attackCount: 0

@@ -96,11 +96,11 @@ GameObject:
   - component: {fileID: 4340924522358846975}
   - component: {fileID: 4340924522358846961}
   - component: {fileID: 4340924522358846960}
-  - component: {fileID: 4340924522358846962}
+  - component: {fileID: -7919432618802017935}
   - component: {fileID: 4340924522358846963}
   - component: {fileID: 4340924522358846964}
   m_Layer: 5
-  m_Name: Network Player UI
+  m_Name: Local UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4340924522358846962
+--- !u!114 &-7919432618802017935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,13 +175,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4340924522358846974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 228631eec8cd1bc4092c015cb3a8eeec, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e815cea26467414dad4cde804ce0391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   img_root: {fileID: 4340924522358846960}
-  txt_name: {fileID: 4340924523552930903}
-  txt_hitCount: {fileID: 4340924523005105200}
-  txt_attackCount: {fileID: 4340924523328816141}
+  userName: {fileID: 4340924523552930903}
+  hitCount: {fileID: 4340924523005105200}
+  attackCount: {fileID: 4340924523328816141}
 --- !u!114 &4340924522358846963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 4340924522782756156}
   - component: {fileID: 4340924522782756155}
   m_Layer: 5
-  m_Name: txtLabel_AttackCount
+  m_Name: TextLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -511,7 +511,7 @@ GameObject:
   - component: {fileID: 4340924523005105200}
   - component: {fileID: 4340924523005105215}
   m_Layer: 5
-  m_Name: txtData_HitCount
+  m_Name: TextData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -611,7 +611,7 @@ GameObject:
   - component: {fileID: 4340924523328816141}
   - component: {fileID: 4340924523328816140}
   m_Layer: 5
-  m_Name: txtData_AttackCount
+  m_Name: TextData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -711,7 +711,7 @@ GameObject:
   - component: {fileID: 4340924523552930903}
   - component: {fileID: 4340924523552930902}
   m_Layer: 5
-  m_Name: txtData_Name
+  m_Name: TextData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -811,7 +811,7 @@ GameObject:
   - component: {fileID: 4340924523952565164}
   - component: {fileID: 4340924523952565166}
   m_Layer: 5
-  m_Name: txtLabel_Name
+  m_Name: TextLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -911,7 +911,7 @@ GameObject:
   - component: {fileID: 4340924524039104059}
   - component: {fileID: 4340924524039104058}
   m_Layer: 5
-  m_Name: txtLabel_HitCount
+  m_Name: TextLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

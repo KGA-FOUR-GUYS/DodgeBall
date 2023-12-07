@@ -108,8 +108,8 @@ public class MyNetworkPlayer : NetworkBehaviour
         OnPlayerAttackCountChanged = playerUI.OnPlayerAttackCountChanged;
 
         // Invoke all event handlers with the initial data from spawn payload
-        OnPlayerNumberChanged.Invoke(playerNumber);
         OnPlayerColorChanged.Invoke(playerColor);
+        OnPlayerNumberChanged.Invoke(playerNumber);
         OnPlayerHitCountChanged.Invoke(playerHitCount);
         OnPlayerAttackCountChanged.Invoke(playerAttackCount);
     }
