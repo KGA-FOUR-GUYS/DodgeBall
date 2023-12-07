@@ -34,7 +34,7 @@ namespace NetworkRoom
 
         public override void OnStartServer()
         {
-            //// Add this to the static Players List
+            // Add this to the static Players List
             playersList.Add(this);
 
             // set the Player Color SyncVar
@@ -58,20 +58,14 @@ namespace NetworkRoom
             playersList.Remove(this);
         }
 
-        #endregion
+		#endregion
 
-        #region Client
+		#region Client
 
-        public override void OnStartClient()
-        {
-            // Instantiate the player UI as child of the Players Panel
-            globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
-            globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
-
+		public override void OnStartClient()
+		{
             localUIObject = Instantiate(localUIPrefab, CanvasUIManager.GetPlayersPanel());
             localUIManager = localUIObject.GetComponent<LocalUIManager>();
-
-            _globalDataManager.OnGameTimeChanged += globalUIManager.OnGlobalTimeValueChanged;
 
             _localDataManager.OnColorChanged += localUIManager.OnPlayerColorChanged;
             _localDataManager.OnNumberChanged += localUIManager.OnPlayerNumberChanged;
@@ -80,22 +74,27 @@ namespace NetworkRoom
             _localDataManager.InvokeAll();
         }
 
-        public override void OnStartLocalPlayer()
+		public override void OnStartLocalPlayer()
         {
-            // Activate the main panel
+            globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
+            globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
+
+            _globalDataManager.OnGameTimeChanged += globalUIManager.OnGlobalTimeValueChanged;
+            
             CanvasUIManager.SetActive(true);
         }
 
         public override void OnStopLocalPlayer()
         {
-            // Deactivate the main panel
             CanvasUIManager.SetActive(false);
-        }
 
-        public override void OnStopClient()
-        {
             _globalDataManager.OnGameTimeChanged -= globalUIManager.OnGlobalTimeValueChanged;
 
+            Destroy(globalUIObject);
+        }
+
+		public override void OnStopClient()
+		{
             _localDataManager.OnColorChanged -= localUIManager.OnPlayerColorChanged;
             _localDataManager.OnNumberChanged -= localUIManager.OnPlayerNumberChanged;
             _localDataManager.OnHitCountChanged -= localUIManager.OnPlayerHitCountChanged;
@@ -104,6 +103,6 @@ namespace NetworkRoom
             Destroy(localUIObject);
         }
 
-        #endregion
-    }
+		#endregion
+	}
 }
