@@ -8,9 +8,12 @@ public class PlayerControl : NetworkBehaviour
 {
     [Header("Components")]
     public NavMeshAgent agent;
+    public Animator animator;
     public TextMesh healthBar;
-    public MeshRenderer ColorObj;
+    public SkinnedMeshRenderer MundoSkin;
+    public Material[] ColorObj;
     public GameObject ThrowLineObj;
+    private GhostEffect ghostEffect;
 
     [Header("Shoot")]
     public KeyCode showLaneKey = KeyCode.Q;
@@ -22,14 +25,19 @@ public class PlayerControl : NetworkBehaviour
     private bool oneTime = true;
     public float CoolTime = 5f;
     private float cool;
+    private bool canFlash = true;
+    private bool canGhost = true;
 
     [Header("Stats")]
     [SyncVar] public int health = 5;
     public float moveSpeed;
+    private float Speed;
 
     private void Awake()
     {
         cool = CoolTime;
+        Speed = moveSpeed;
+        ghostEffect = GetComponent<GhostEffect>();
     }
 
     private void Update()
@@ -39,22 +47,28 @@ public class PlayerControl : NetworkBehaviour
         // take input from focused window only
         if (!Application.isFocused) return;
 
-        // movement for local player
-        //if (isLocalPlayer)
+
+        if (isLocalPlayer)
         {
-            ColorObj.material.color = Color.green;
+            MundoSkin.material = ColorObj[1];
             agent.speed = moveSpeed;
 
+            //이동
             Move();
+            CMDMove();
+
+            //오대식
             if (Input.GetKeyDown(showLaneKey))
             {
                 if (SkillOn)
                 {
                     agent.enabled = false;
+                    //스마트키 On
                     if (Instant)
                     {
-                        CMDShootDaeSick();
+                        ShootOHDaeSick();
                     }
+                    //스마트키 Off
                     else
                     {
                         ShowThrowLine();
@@ -62,7 +76,15 @@ public class PlayerControl : NetworkBehaviour
                 }
             }
             ShowAfterChoice();
+
+            //점멸
             Flash();
+
+            //유체화
+            if (canGhost && Input.GetKeyDown(KeyCode.D))
+            {
+                StartCoroutine(Ghost());
+            }
         }
     }
 
@@ -88,34 +110,11 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
-    private void Flash()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            agent.enabled = false;
-            Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane DP = new Plane(Vector3.up, Vector3.zero);
-            float rayDistance;
-            if (DP.Raycast(cameraRay, out rayDistance))
-            {
-                Vector3 raypoint = cameraRay.GetPoint(rayDistance);
-                Vector3 targetPos = new Vector3(raypoint.x, transform.position.y, raypoint.z);
-                float mousedis = Vector3.Distance(targetPos, transform.position);
-                float Fdis = Mathf.Min(mousedis, 2f);
-                Debug.Log(Fdis);
-                Debug.Log(targetPos.normalized);
-                transform.position = targetPos.normalized * Fdis;
-            }
-        }
-    }
-
-
     private void ShowThrowLine()
     {
         ShowLine = true;
         ThrowLineObj.SetActive(ShowLine);
     }
-
     private void ShowAfterChoice()
     {
         if (ShowLine)
@@ -128,11 +127,11 @@ public class PlayerControl : NetworkBehaviour
                 Vector3 raypoint = cameraRay.GetPoint(rayDistance);
                 Vector3 lookPos = raypoint - transform.position;
                 float RotValue = Mathf.Atan2(lookPos.x, lookPos.z) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, RotValue, 0);
+                ThrowLineObj.transform.rotation = Quaternion.Euler(0, RotValue, 0);
             }
             if (Input.GetMouseButtonDown(0))
             {
-                CMDShootDaeSick();
+                ShootOHDaeSick();
                 ShowLine = false;
             }
             if (Input.GetMouseButtonDown(1))
@@ -142,9 +141,7 @@ public class PlayerControl : NetworkBehaviour
             ThrowLineObj.SetActive(ShowLine);
         }
     }
-
-    [Command]
-    private void CMDShootDaeSick()
+    private void ShootOHDaeSick()
     {
         if (SkillOn)
         {
@@ -158,34 +155,91 @@ public class PlayerControl : NetworkBehaviour
                 Vector3 targetPos = new Vector3(raypoint.x, transform.position.y, raypoint.z);
                 transform.LookAt(targetPos);
             }
-            GameObject Daesick = Instantiate(OhDaeSick, ThrowPoint.position, transform.rotation);
-            NetworkServer.Spawn(Daesick);
-            RPCShooting();
-            SkillOn = false;
+            CMDGenOhDaeSick();
         }
-        if (!SkillOn && oneTime)
+        if (!SkillOn)
         {
-            oneTime = false;
-            StartCoroutine(Timer());
+            Invoke(nameof(Timer), cool);
         }
     }
-
-    private IEnumerator Timer()
+    private void Timer()
     {
-        while (CoolTime >= 0)
+        SkillOn = true;
+    }
+
+    private void Flash()
+    {
+        if (canFlash && Input.GetKeyDown(KeyCode.F))
         {
-            CoolTime -= Time.deltaTime;
+            canFlash = false;
+            agent.enabled = false;
+
+
+            Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Plane DP = new Plane(Vector3.up, Vector3.zero);
+            float rayDistance;
+            if (DP.Raycast(cameraRay, out rayDistance))
+            {
+                Vector3 raypoint = cameraRay.GetPoint(rayDistance);
+                Vector3 mousePos = new Vector3(raypoint.x, transform.position.y, raypoint.z);
+                Vector3 targetPos = mousePos - transform.position;
+
+                float mouseDistance = targetPos.magnitude;
+                float FlashDistance = Mathf.Min(mouseDistance, 2f);
+
+                transform.position += targetPos.normalized*FlashDistance;
+                transform.LookAt(mousePos);
+            }
+        }
+    }
+    private IEnumerator Ghost()
+    {
+        canGhost = false;
+        moveSpeed = moveSpeed * 1.24f;
+        float ghostTime = 15f;
+        while (ghostTime > 0)
+        {
+            ghostTime -= Time.deltaTime;
+            ghostEffect.CreateGhostEffectObject(Color.cyan, 5f, 0.5f, 0.5f, 0.3f);
             yield return null;
         }
-        oneTime = true;
-        SkillOn = true;
+        moveSpeed = Speed;
+    }
+
+
+    [Command]
+    private void CMDMove()
+    {
+        RPCWalking();
+    }
+
+    [Command]
+    private void CMDGenOhDaeSick()
+    {
+        RPCShooting();
+        Invoke(nameof(SpawnOhDaeSick), 0.41f);
+        SkillOn = false;
+    }
+
+    private void SpawnOhDaeSick()
+    {
+        GameObject Daesick = Instantiate(OhDaeSick, ThrowPoint.position, transform.rotation);
+        NetworkServer.Spawn(Daesick);
+    }
+
+
+    [ClientRpc]
+    private void RPCWalking()
+    {
+        animator.SetBool("HasTarget", agent.velocity != Vector3.zero);
     }
 
     [ClientRpc]
     private void RPCShooting()
     {
-        //슈팅 애니재생해줭.
+        animator.SetTrigger("Throw");
     }
+
 
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
@@ -198,6 +252,11 @@ public class PlayerControl : NetworkBehaviour
                 NetworkServer.Destroy(gameObject);
             }
         }
+    }
+
+    private void AniSpeed(float speed)
+    {
+        animator.speed = speed;
     }
 
 

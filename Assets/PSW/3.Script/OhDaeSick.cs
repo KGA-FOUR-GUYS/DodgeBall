@@ -6,7 +6,7 @@ using Mirror;
 public class OhDaeSick : NetworkBehaviour
 {
     public GameObject Model;
-    public float destroyAfter = 2f;
+    public float destroyAfter = 1f;
     public Rigidbody rb;
     public float shootForce = 500f;
     private float rotSpeed = 0f;
