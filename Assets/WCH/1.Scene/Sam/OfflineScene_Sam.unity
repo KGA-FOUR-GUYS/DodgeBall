@@ -1181,19 +1181,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2008127829}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7d8650c751710349bb9546d1697b9cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c0de782c06bd5046a9ee01017986064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   runInBackground: 1
   autoStartServerBuild: 1
-  autoConnectClientBuild: 1
+  autoConnectClientBuild: 0
   sendRate: 100
   offlineScene: Assets/WCH/1.Scene/Sam/OfflineScene_Sam.unity
   onlineScene: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
   transport: {fileID: 2008127830}
   networkAddress: 127.0.0.1
-  maxConnections: 2
+  maxConnections: 3
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
@@ -1216,8 +1216,8 @@ MonoBehaviour:
   connectionQualityInterval: 3
   timeInterpolationGui: 0
   showRoomGUI: 1
-  minPlayers: 2
-  roomPlayerPrefab: {fileID: 114033720796874720, guid: deae2134a1d77704b9c595efe69767dd, type: 3}
+  minPlayers: 3
+  roomPlayerPrefab: {fileID: 7488040681110759934, guid: 72c2efc9b05e3d346aa645b33b4bb2f2, type: 3}
   RoomScene: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
   GameplayScene: Assets/WCH/1.Scene/Sam/OnlineScene_Sam.unity
   _allPlayersReady: 0

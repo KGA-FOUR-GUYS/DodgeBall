@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using Mirror.Examples.NetworkRoom;
 
 public class RoomManager : MonoBehaviour
 {
-    private GameObject RM_Singleton;
-    private NetworkRoomManager room_manager;
+    //private GameObject RM_Singleton;
+    private NetworkRoomManagerExt room_manager;
 
     private GameObject P1Slot;
     private NetworkRoomPlayer P1Component;
 
     private GameObject P2Slot;
     private NetworkRoomPlayer P2Component;
-
-    private bool isReady = false;
 
     [SerializeField] private Text p1name_Text;
     [SerializeField] private Image p1img;
@@ -30,8 +29,10 @@ public class RoomManager : MonoBehaviour
 
     private void Start()
     {
-        RM_Singleton = GameObject.Find("NetworkRoomManager");
-        room_manager = RM_Singleton.GetComponent<NetworkRoomManager>();
+        
+        //RM_Singleton = GameObject.Find("NetworkRoomManager");
+        //room_manager = RM_Singleton.GetComponent<NetworkRoomManagerExt>();
+        room_manager = NetworkRoomManagerExt.singleton;
         CountDown_co = null;
         ReadyBtn.gameObject.SetActive(true);
         CountDown_Text.enabled = false;
@@ -40,10 +41,8 @@ public class RoomManager : MonoBehaviour
     private void Update()
     {
         UpdateUI();
-        if(!isReady)
-        room_manager.allPlayersReady = false;
         isAllReady();
-
+        Disconnet3rdPlayer();
     }
 
     private void UpdateUI()
@@ -155,6 +154,22 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    [ServerCallback]
+    public void Disconnet3rdPlayer()
+    {
+        if (room_manager.roomSlots.Count == 3)
+        {
+            GameObject P3Slot = room_manager.roomSlots[2].gameObject;
+            NetworkRoomPlayer P3Component = P3Slot.GetComponent<NetworkRoomPlayer>();
+            //NetworkConnectionToClient conn = P3Slot.GetComponent<NetworkConnectionToClient>();
+            //GetComponent<NetworkIdentity>().connectionToClient.Disconnect();
+            //conn.Disconnect();
+            //Transport.active.ServerDisconnect(conn.connectionId);
+
+            P3Component.GetComponent<NetworkIdentity>().connectionToClient.Disconnect();
+        }
+    }
+
     public void isAllReady()
     {
         if (room_manager.roomSlots.Count == 2)
@@ -184,7 +199,6 @@ public class RoomManager : MonoBehaviour
         CountDown_Text.text = "1";
         yield return new WaitForSeconds(1f);
         CountDown_Text.text = "0";
-        isReady = true;
         room_manager.ServerChangeScene(room_manager.GameplayScene);
         yield break;
 
