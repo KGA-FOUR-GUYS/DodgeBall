@@ -48,6 +48,16 @@ public class PlayerControl : NetworkBehaviour
     public float moveSpeed;
     private float Speed;
 
+    public void IncreaseAttackCount()
+    {
+        _localDataManager.attackCount++;
+    }
+
+    public void IncreaseHitCount()
+    {
+        _localDataManager.hitCount++;
+    }
+
     private void Awake()
     {
         Speed = moveSpeed;
@@ -79,10 +89,34 @@ public class PlayerControl : NetworkBehaviour
         playersList.Remove(this);
 
         // 승리화면 출력
+        if (!isServer)
+            CmdShowResult(SQLManager.Instance.userInfo.ID);
 
         CanvasUIManager.SetActive(false);
         DestroyLocalUI();
         DestroyGlobalUI();
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdShowResult(string loserID)
+    {
+        RPCShowResult(loserID);
+        Debug.Log("[CmdShowResult]");
+    }
+
+    [ClientRpc]
+    public void RPCShowResult(string loserID)
+    {
+        Debug.Log("[RPCShowResult]");
+
+        if (loserID.Equals(SQLManager.Instance.userInfo.ID))
+        {
+            Debug.Log("내가 졌따!");
+        }
+        else
+        {
+            Debug.Log("내가 이겻따!");
+        }
     }
 
     private void Update()
@@ -205,6 +239,7 @@ public class PlayerControl : NetworkBehaviour
     [Command]
     public void CMDGenOhDaeSick()
     {
+        IncreaseAttackCount();
         RPCShooting();
         Invoke(nameof(SpawnOhDaeSick), 0.41f);
     }
@@ -233,6 +268,8 @@ public class PlayerControl : NetworkBehaviour
     {
         if (other.GetComponent<OhDaeSick>() != null)
         {
+            IncreaseHitCount();
+
             --health;
             if (health == 0)
             {

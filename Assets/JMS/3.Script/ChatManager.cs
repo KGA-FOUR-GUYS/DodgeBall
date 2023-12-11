@@ -59,10 +59,7 @@ namespace NetworkRoom
         public void CmdSendMessage(string message)
         {
             RPCReceiveMessgae(message);
-
             inputMessage.text = string.Empty;
-
-            Debug.Log("[CmdSendMessage]");
         }
 
         [ClientRpc]
@@ -71,8 +68,6 @@ namespace NetworkRoom
             var obj = Instantiate(messagePrefab, chatList);
             Text msg = obj.GetComponent<Text>();
             msg.text = message;
-
-            Debug.Log("[RPCReceiveMessgae]");
         }
     }
 }
