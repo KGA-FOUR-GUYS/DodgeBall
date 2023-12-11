@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4817109203880908}
   - component: {fileID: 114387717104821018}
   - component: {fileID: 114033720796874720}
+  - component: {fileID: 927549914009838975}
   m_Layer: 0
   m_Name: RoomPlayer
   m_TagString: Untagged
@@ -67,3 +68,19 @@ MonoBehaviour:
   showRoomGUI: 1
   readyToBegin: 0
   index: 0
+--- !u!114 &927549914009838975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588750985201798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa590aad6a08bcd40ad427870739a1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  myname: 
