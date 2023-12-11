@@ -12,7 +12,7 @@ public class PlayerControl : NetworkBehaviour
     public TextMesh healthBar;
     public SkinnedMeshRenderer MundoSkin;
     public Material[] ColorObj;
-    public GameObject ThrowLineObj;
+    public SkillControl skillControl;
     private GhostEffect ghostEffect;
 
     [Header("Shoot")]
@@ -20,11 +20,8 @@ public class PlayerControl : NetworkBehaviour
     public GameObject OhDaeSick;
     public Transform ThrowPoint;
     public bool Instant = false;
-    public bool ShowLine = false;
-    private bool SkillOn = true;
     private bool oneTime = true;
     public float CoolTime = 5f;
-    private float cool;
     private bool canFlash = true;
     private bool canGhost = true;
 
@@ -35,7 +32,6 @@ public class PlayerControl : NetworkBehaviour
 
     private void Awake()
     {
-        cool = CoolTime;
         Speed = moveSpeed;
         ghostEffect = GetComponent<GhostEffect>();
     }
@@ -60,22 +56,22 @@ public class PlayerControl : NetworkBehaviour
             //오대식
             if (Input.GetKeyDown(showLaneKey))
             {
-                if (SkillOn)
+                if (skillControl.skillOn)
                 {
                     agent.enabled = false;
                     //스마트키 On
                     if (Instant)
                     {
-                        ShootOHDaeSick();
+                        skillControl.ShootOHDaeSick();
                     }
                     //스마트키 Off
                     else
                     {
-                        ShowThrowLine();
+                        skillControl.ShowThrowLine();
                     }
                 }
             }
-            ShowAfterChoice();
+            skillControl.ShowAfterChoice();
 
             //점멸
             Flash();
@@ -110,62 +106,6 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
-    private void ShowThrowLine()
-    {
-        ShowLine = true;
-        ThrowLineObj.SetActive(ShowLine);
-    }
-    private void ShowAfterChoice()
-    {
-        if (ShowLine)
-        {
-            Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane DP = new Plane(Vector3.up, Vector3.zero);
-            float rayDistance;
-            if (DP.Raycast(cameraRay, out rayDistance))
-            {
-                Vector3 raypoint = cameraRay.GetPoint(rayDistance);
-                Vector3 lookPos = raypoint - transform.position;
-                float RotValue = Mathf.Atan2(lookPos.x, lookPos.z) * Mathf.Rad2Deg;
-                ThrowLineObj.transform.rotation = Quaternion.Euler(0, RotValue, 0);
-            }
-            if (Input.GetMouseButtonDown(0))
-            {
-                ShootOHDaeSick();
-                ShowLine = false;
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                ShowLine = false;
-            }
-            ThrowLineObj.SetActive(ShowLine);
-        }
-    }
-    private void ShootOHDaeSick()
-    {
-        if (SkillOn)
-        {
-            CoolTime = cool;
-            Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane DP = new Plane(Vector3.up, Vector3.zero);
-            float rayDistance;
-            if (DP.Raycast(cameraRay, out rayDistance))
-            {
-                Vector3 raypoint = cameraRay.GetPoint(rayDistance);
-                Vector3 targetPos = new Vector3(raypoint.x, transform.position.y, raypoint.z);
-                transform.LookAt(targetPos);
-            }
-            CMDGenOhDaeSick();
-        }
-        if (!SkillOn)
-        {
-            Invoke(nameof(Timer), cool);
-        }
-    }
-    private void Timer()
-    {
-        SkillOn = true;
-    }
 
     private void Flash()
     {
@@ -214,11 +154,10 @@ public class PlayerControl : NetworkBehaviour
     }
 
     [Command]
-    private void CMDGenOhDaeSick()
+    public void CMDGenOhDaeSick()
     {
         RPCShooting();
         Invoke(nameof(SpawnOhDaeSick), 0.41f);
-        SkillOn = false;
     }
 
     private void SpawnOhDaeSick()
@@ -240,7 +179,6 @@ public class PlayerControl : NetworkBehaviour
         animator.SetTrigger("Throw");
     }
 
-
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
@@ -258,7 +196,4 @@ public class PlayerControl : NetworkBehaviour
     {
         animator.speed = speed;
     }
-
-
-
 }
