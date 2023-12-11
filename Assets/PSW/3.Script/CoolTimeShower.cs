@@ -6,13 +6,19 @@ using Mirror;
 
 public class CoolTimeShower : NetworkBehaviour
 {
-    private GameObject g;
-    [SerializeField] private Text text;
+    [SerializeField] private PlayerControl playerControl;
     [SerializeField] private SkillControl skillControl;
+    [SerializeField] private Image OhDaeSick;
+    [SerializeField] private Image Ghost;
+    [SerializeField] private Image Flash;
+    private Color onColor;
+    private Color offColor;
 
     private void Start()
-    {        
-        text = FindObjectOfType<Text>();
+    {
+        onColor = Color.white;
+        offColor = Color.gray;
+
     }
 
     private void Update()
@@ -21,13 +27,29 @@ public class CoolTimeShower : NetworkBehaviour
         {
             if (skillControl.skillOn)
             {
-                text.color = Color.white;
-                text.text = "On";
+                OhDaeSick.color = onColor;
             }
             else
             {
-                text.color = Color.red;
-                text.text = "Off";
+                OhDaeSick.color = offColor;
+            }
+
+            if (playerControl.canGhost)
+            {
+                Ghost.color = onColor;
+            }
+            else
+            {
+                Ghost.color = offColor;
+            }
+
+            if (playerControl.canFlash)
+            {
+                Flash.color = onColor;
+            }
+            else
+            {
+                Flash.color = offColor;
             }
         }
     }

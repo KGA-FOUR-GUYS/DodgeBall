@@ -40,8 +40,8 @@ public class PlayerControl : NetworkBehaviour
     public bool Instant = false;
     private bool oneTime = true;
     public float CoolTime = 5f;
-    private bool canFlash = true;
-    private bool canGhost = true;
+    public bool canFlash = true;
+    public bool canGhost = true;
 
     [Header("Stats")]
     [SyncVar] public int health = 5;
@@ -134,7 +134,7 @@ public class PlayerControl : NetworkBehaviour
 
             //이동
             Move();
-            //CMDMove();
+            CMDMove();
 
             //오대식
             if (Input.GetKeyDown(showLaneKey))
@@ -328,5 +328,17 @@ public class PlayerControl : NetworkBehaviour
         _globalDataManager.OnGameTimeChanged -= globalUIManager.OnGlobalTimeValueChanged;
 
         Destroy(globalUIObject);
+    }
+
+    public void SmartkeyBtn()
+    {
+        if (Instant)
+        {
+            Instant = false;
+        }
+        else
+        {
+            Instant = true;
+        }
     }
 }
