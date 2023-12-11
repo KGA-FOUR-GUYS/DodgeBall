@@ -31,6 +31,8 @@ namespace NetworkRoom
 
             path = Application.dataPath + Path.DirectorySeparatorChar + "Database";
             SetConnectionInfo(path);
+
+            networkAddress = ServerIP;
         }
 
 #if UNITY_SERVER
@@ -40,7 +42,7 @@ namespace NetworkRoom
             Instance.StartServer();
         }
 #endif
-
+        
         private void SetConnectionInfo(string path)
         {
             if (!File.Exists(path))
