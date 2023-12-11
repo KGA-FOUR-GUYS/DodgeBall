@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GlobalUIManager : MonoBehaviour
+namespace NetworkRoom
 {
-    [Header("Global UI root object")]
-    public RectTransform root;
-
-    [Header("Global UI child objects")]
-    public Text globalTime;
-
-    public void OnGlobalTimeValueChanged(DateTime newTime)
+    public class GlobalUIManager : MonoBehaviour
     {
-        globalTime.text = string.Format($"{newTime.Minute:00} : {newTime.Second:00}");
-        
-        // 남은 시간에 따라 Color 변경
-        // globalTime.color = newColor;
+        [Header("Global UI root object")]
+        public RectTransform root;
+
+        [Header("Global UI child objects")]
+        public Text globalTime;
+
+        public void OnGlobalTimeValueChanged(DateTime newTime)
+        {
+            globalTime.text = string.Format($"{newTime.Minute:00} : {newTime.Second:00}");
+
+            // 남은 시간에 따라 Color 변경
+            // globalTime.color = newColor;
+        }
     }
 }

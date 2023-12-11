@@ -1,13 +1,19 @@
+using LitJson;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NetworkRoom
 {
     public class RoomManager : NetworkRoomManager
     {
         public static RoomManager Instance { get; private set; }
+        public string ServerIP { get; set; }
+
+        private string path;
 
         public override void Awake()
         {
@@ -22,53 +28,29 @@ namespace NetworkRoom
             {
                 Destroy(gameObject);
             }
+
+            path = Application.dataPath + Path.DirectorySeparatorChar + "Database";
+            SetConnectionInfo(path);
         }
 
-        // 새로운 플레이어가 접속한 경우
-        public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+#if UNITY_SERVER
+        private void Start()
         {
-            base.OnServerAddPlayer(conn);
-            
-            PlayerController.ResetPlayerNumbers();
+            Instance.networkAddress = ServerIP;
+            Instance.StartServer();
         }
+#endif
 
-        // 플레이어 중 누군가 접속해제한 경우
-        public override void OnServerDisconnect(NetworkConnectionToClient conn)
+        private void SetConnectionInfo(string path)
         {
-            base.OnServerDisconnect(conn);
-
-            PlayerController.ResetPlayerNumbers();
-        }
-
-        public override void OnRoomServerSceneChanged(string sceneName)
-        {
-            // spawn the initial batch of Rewards
-            if (sceneName == GameplayScene)
+            if (!File.Exists(path))
             {
-                //Spawner.InitialSpawn();
+                Directory.CreateDirectory(path);
+                string jsonString = File.ReadAllText(path + Path.DirectorySeparatorChar + "config.json");
+
+                JsonData itemData = JsonMapper.ToObject(jsonString);
+                ServerIP = itemData[0]["IP"].ToString();
             }
-        }
-
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
-        {
-            LocalDataManager playerDataManager = gamePlayer.GetComponent<LocalDataManager>();
-            playerDataManager.number = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-            return true;
-        }
-
-        public override void OnRoomStopClient()
-        {
-            base.OnRoomStopClient();
-        }
-
-        public override void OnRoomStopServer()
-        {
-            base.OnRoomStopServer();
-        }
-
-        public void Btn_OnStartGame()
-        {
-            ServerChangeScene(GameplayScene);
         }
     }
 }

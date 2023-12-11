@@ -8,15 +8,15 @@ namespace NetworkRoom
 {
     public class LocalDataManager : NetworkBehaviour
     {
-        public event Action<int> OnNumberChanged;
+        public event Action<string> OnNameChanged;
         public event Action<Color32> OnColorChanged;
         public event Action<ushort> OnHitCountChanged;
         public event Action<ushort> OnAttackCountChanged;
 
         #region SyncVar
 
-        [SyncVar(hook = nameof(PlayerNumberChanged))]
-        public int number = 0;
+        [SyncVar(hook = nameof(PlayerNameChanged))]
+        public string name = string.Empty;
 
         [SyncVar(hook = nameof(PlayerColorChanged))]
         public Color32 color = Color.white;
@@ -27,9 +27,9 @@ namespace NetworkRoom
         [SyncVar(hook = nameof(PlayerAttackCountChanged))]
         public ushort attackCount = 0;
 
-        void PlayerNumberChanged(int _, int newData)
+        void PlayerNameChanged(string _, string newData)
         {
-            OnNumberChanged?.Invoke(newData);
+            OnNameChanged?.Invoke(newData);
         }
 
         void PlayerColorChanged(Color32 _, Color32 newColor)
@@ -55,7 +55,7 @@ namespace NetworkRoom
         public void InvokeAll()
         {
             OnColorChanged?.Invoke(color);
-            OnNumberChanged?.Invoke(number);
+            OnNameChanged?.Invoke(name);
             OnHitCountChanged?.Invoke(hitCount);
             OnAttackCountChanged?.Invoke(attackCount);
         }

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,151 +7,145 @@ using LitJson;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
-public class UserInfo
+namespace NetworkRoom
 {
-    public string ID { get; private set; }
-    public string Password { get; private set; }
-
-    public UserInfo(string id, string password)
+    public class UserInfo
     {
-        ID = id;
-        Password = password;
-    }
-}
+        public string ID { get; private set; }
+        public string Password { get; private set; }
 
-public class SQLManager : MonoBehaviour
-{
-    public static UserInfo UserInfo { get; set; }
-
-    private static MySqlConnection _sqlConnection;
-    private static MySqlDataReader _sqlReader;
-
-    private string _connectionStringPath;
-
-    public static SQLManager Instance { get; private set; } = null;
-
-    private void Awake()
-    {
-        if (Instance == null)
+        public UserInfo(string id, string password)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        _connectionStringPath = Application.dataPath + Path.DirectorySeparatorChar + "Database";
-        if (!TryCreateConnectionString(_connectionStringPath, out string connectionInfo)) return;
-        try
-        {
-            if (string.IsNullOrEmpty(connectionInfo))
-            {
-                Debug.Log("Error - Empty Connection String");
-                return;
-            }
-
-            _sqlConnection = new MySqlConnection(connectionInfo);
-            
-            if (!TryOpen(_sqlConnection))
-            {
-                Debug.Log($"Error - Failed to open connection.\n{connectionInfo}");
-                return;
-            }
-
-            Debug.Log($"Connection Success.\n{connectionInfo}");
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
-            throw;
+            ID = id;
+            Password = password;
         }
     }
 
-    private bool TryCreateConnectionString(string path, out string connectionString)
+    public class SQLManager : MonoBehaviour
     {
-        connectionString = string.Empty;
+        public UserInfo userInfo;
 
-        // When file not found. create initial directory.
-        if (!File.Exists(path))
+        public MySqlConnection connection;
+        public MySqlDataReader reader;
+
+        private string path;
+
+        public static SQLManager Instance { get; private set; } = null;
+
+        private void Awake()
         {
-            Directory.CreateDirectory(path);
-            string jsonString = File.ReadAllText(path + Path.DirectorySeparatorChar + "config.json");
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
 
-            JsonData itemData = JsonMapper.ToObject(jsonString);
-            connectionString = $"Server={itemData[0]["IP"]};" +
-                                      $"Database={itemData[0]["TableName"]};" +
-                                      $"Uid={itemData[0]["ID"]};" +
-                                      $"Pwd={itemData[0]["PW"]};" +
-                                      $"Port={itemData[0]["PORT"]};" +
-                                      $"CharSet=utf8;";
+#if !UNITY_SERVER
+            path = Application.dataPath + Path.DirectorySeparatorChar + "Database";
+            string connectionInfo = SetConnectionString(path);
+            try
+            {
+                if (string.IsNullOrEmpty(connectionInfo))
+                {
+                    Debug.Log("[SQLManager] Connection String Error");
+                    return;
+                }
+
+                connection = new MySqlConnection(connectionInfo);
+                connection.Open();
+                Debug.Log($"[SQLManager] Successfully Connected.\n{connectionInfo}");
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                throw;
+            }
+#endif
+        }
+
+        private string SetConnectionString(string path)
+        {
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                string jsonString = File.ReadAllText(path + Path.DirectorySeparatorChar + "config.json");
+
+                JsonData itemData = JsonMapper.ToObject(jsonString);
+                string connectionString = $"Server={itemData[0]["IP"]};" +
+                                          $"Database={itemData[0]["TableName"]};" +
+                                          $"Uid={itemData[0]["ID"]};" +
+                                          $"Pwd={itemData[0]["PW"]};" +
+                                          $"Port={itemData[0]["PORT"]};" +
+                                          $"CharSet=utf8;";
+                return connectionString;
+            }
+
+            return null;
+        }
+
+        private bool IsValidConnection(MySqlConnection connection)
+        {
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                connection.Open();
+
+                if (connection.State != System.Data.ConnectionState.Open)
+                    return false;
+            }
+
             return true;
         }
 
-        return false;
-    }
-
-    private static bool TryOpen(MySqlConnection connection)
-    {
-        if (connection.State != ConnectionState.Open)
+        public bool LogIn(string id, string password)
         {
-            connection.Open();
-
-            if (connection.State != ConnectionState.Open)
-                return false;
-        }
-
-        return true;
-    }
-
-    public static bool LogIn(string id, string password)
-    {
-        try
-        {
-            if (!TryOpen(_sqlConnection))
-                return false;
-
-            string query = @$"SELECT User_Name, User_Password FROM user_info
-                              WHERE User_Name = '{id}' AND User_Password = '{password}';";
-
-            using (MySqlCommand cmd = new MySqlCommand(query, _sqlConnection))
-            using (_sqlReader = cmd.ExecuteReader())
+            try
             {
-                _sqlReader = cmd.ExecuteReader();
-                if (_sqlReader.HasRows)
+                if (!IsValidConnection(connection))
+                    return false;
+
+                string query = @$"SELECT User_Name, User_Password FROM user_info
+                                  WHERE User_Name = '{id}' AND User_Password = '{password}';";
+
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+
+                reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    while (_sqlReader.Read())
+                    while (reader.Read())
                     {
-                        string readId = _sqlReader.IsDBNull(0) ? string.Empty : _sqlReader["User_Name"].ToString();
-                        string readPassword = _sqlReader.IsDBNull(0) ? string.Empty : _sqlReader["User_Password"].ToString();
+                        string readId = reader.IsDBNull(0) ? string.Empty : reader["User_Name"].ToString();
+                        string readPassword = reader.IsDBNull(0) ? string.Empty : reader["User_Password"].ToString();
 
                         if (string.IsNullOrEmpty(readId) || string.IsNullOrEmpty(readPassword))
                             break;
 
-                        UserInfo = new UserInfo(readId, readPassword);
+                        userInfo = new UserInfo(readId, readPassword);
 
-                        if (!_sqlReader.IsClosed)
-                            _sqlReader.Close();
+                        if (!reader.IsClosed)
+                            reader.Close();
 
                         return true;
                     }
                 }
 
-                if (!_sqlReader.IsClosed)
-                    _sqlReader.Close();
+                if (!reader.IsClosed)
+                    reader.Close();
 
                 return false;
             }
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
 
-            if (!_sqlReader.IsClosed)
-                _sqlReader.Close();
+                if (!reader.IsClosed)
+                    reader.Close();
 
-            return false;
+                return false;
+            }
         }
     }
 }

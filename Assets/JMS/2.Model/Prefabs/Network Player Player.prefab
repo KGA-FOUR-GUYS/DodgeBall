@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6218540311130209332}
   - component: {fileID: 2213096522186785279}
   - component: {fileID: 4226840220627512763}
+  - component: {fileID: 2082370643010823318}
   m_Layer: 0
   m_Name: Network Player Player
   m_TagString: Untagged
@@ -98,9 +99,27 @@ MonoBehaviour:
   syncDirection: 1
   syncMode: 0
   syncInterval: 0.1
-  number: 0
+  name: 
   color:
     serializedVersion: 2
     rgba: 4294967295
   hitCount: 0
   attackCount: 0
+--- !u!114 &2082370643010823318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2562260042804059685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ebff8007854d8648a07d4b16a14d086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  messagePrefab: {fileID: 8080477869815108723, guid: 2ff1fed1c7090904599f7022ee0c087e, type: 3}
+  chatList: {fileID: 0}
+  inputMessage: {fileID: 0}

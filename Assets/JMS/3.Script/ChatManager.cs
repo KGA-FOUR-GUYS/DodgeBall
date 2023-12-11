@@ -1,64 +1,58 @@
-using System;
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChatManager : MonoBehaviour
+
+namespace NetworkRoom
 {
-    private Text[] messageBox;
-
-    public Action<string> OnMessage;
-
-    string currentMsg = string.Empty;
-    string lastMsg;
-
-    private void Awake()
+    public class ChatManager : NetworkBehaviour
     {
-        OnMessage += AddMessage;
-    }
+        [Header("Message")]
+        public GameObject messagePrefab;
+        public RectTransform chatList;
+        public InputField inputMessage;
 
-    private void Start()
-    {
-        messageBox = transform.GetComponentsInChildren<Text>();
-        lastMsg = currentMsg;
-    }
-
-    private void Update()
-    {
-        if (currentMsg.Equals(lastMsg))
-            return;
-
-        ShowMessage(currentMsg);
-        lastMsg = currentMsg;
-    }
-
-    public void AddMessage(string message)
-    {
-        currentMsg = message;
-    }
-
-    public void ShowMessage(string message)
-    {
-        bool isInput = false;
-        for (int i = 0; i < messageBox.Length; i++)
+        private void Start()
         {
-            if (messageBox[i].text.Equals(string.Empty))
-            {
-                messageBox[i].text = message;
-                isInput = true;
-                break;
-            }
+            AddListenerToSendButton();
         }
 
-        if (!isInput)
+        public void AddListenerToSendButton()
         {
-            for (int i = messageBox.Length - 1; i > 0; i--)
-            {
-                messageBox[i].text = messageBox[i - 1].text;
-            }
+            GameObject obj1 = GameObject.FindGameObjectWithTag("ChatList");
+            chatList = obj1.GetComponent<RectTransform>();
+            GameObject obj2 = GameObject.FindGameObjectWithTag("Input");
+            inputMessage = obj2.GetComponent<InputField>();
 
-            messageBox[0].text = message;
+            GameObject obj = GameObject.FindGameObjectWithTag("Send");
+            Button sendButton = obj.GetComponent<Button>();
+            sendButton.onClick.AddListener(CmdSendMessage);
+
+            //CmdSendMessage();
+        }
+
+        [Command]
+        public void CmdSendMessage()
+        {
+            var obj = Instantiate(messagePrefab, chatList);
+            Text msg = obj.GetComponent<Text>();
+            msg.text = inputMessage.text;
+            inputMessage.text = string.Empty;
+
+            //NetworkServer.Spawn(obj, gameObject);
+
+            RPCSyncMessage();
+        }
+
+        [ClientRpc]
+        public void RPCSyncMessage()
+        {
+            var obj = Instantiate(messagePrefab, chatList);
+            Text msg = obj.GetComponent<Text>();
+            msg.text = inputMessage.text;
+            inputMessage.text = string.Empty;
         }
     }
 }

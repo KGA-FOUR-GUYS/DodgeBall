@@ -22,9 +22,9 @@ namespace NetworkRoom
             userName.color = newPlayerColor;
         }
 
-        public void OnPlayerNumberChanged(int newPlayerNumber)
+        public void OnPlayerNameChanged(string newPlayerName)
         {
-            userName.text = string.Format($"Player {newPlayerNumber:00}");
+            userName.text = string.Format($"{newPlayerName}");
         }
 
         public void OnPlayerHitCountChanged(ushort newHitCount)

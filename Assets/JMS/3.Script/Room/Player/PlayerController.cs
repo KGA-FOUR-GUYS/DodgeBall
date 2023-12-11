@@ -45,14 +45,6 @@ namespace NetworkRoom
             _localDataManager.attackCount = 0;
         }
 
-        [ServerCallback]
-        internal static void ResetPlayerNumbers()
-        {
-            byte playerNumber = 0;
-            foreach (PlayerController player in playersList)
-                player._localDataManager.number = playerNumber++;
-        }
-
         public override void OnStopServer()
         {
             playersList.Remove(this);
@@ -64,18 +56,20 @@ namespace NetworkRoom
 
 		public override void OnStartClient()
 		{
+            _localDataManager.name = SQLManager.Instance.userInfo.ID;
+
             localUIObject = Instantiate(localUIPrefab, CanvasUIManager.GetPlayersPanel());
             localUIManager = localUIObject.GetComponent<LocalUIManager>();
 
             _localDataManager.OnColorChanged += localUIManager.OnPlayerColorChanged;
-            _localDataManager.OnNumberChanged += localUIManager.OnPlayerNumberChanged;
+            _localDataManager.OnNameChanged += localUIManager.OnPlayerNameChanged;
             _localDataManager.OnHitCountChanged += localUIManager.OnPlayerHitCountChanged;
             _localDataManager.OnAttackCountChanged += localUIManager.OnPlayerAttackCountChanged;
             _localDataManager.InvokeAll();
         }
 
 		public override void OnStartLocalPlayer()
-        {
+        {   
             globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
             globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
 
@@ -96,7 +90,7 @@ namespace NetworkRoom
 		public override void OnStopClient()
 		{
             _localDataManager.OnColorChanged -= localUIManager.OnPlayerColorChanged;
-            _localDataManager.OnNumberChanged -= localUIManager.OnPlayerNumberChanged;
+            _localDataManager.OnNameChanged -= localUIManager.OnPlayerNameChanged;
             _localDataManager.OnHitCountChanged -= localUIManager.OnPlayerHitCountChanged;
             _localDataManager.OnAttackCountChanged -= localUIManager.OnPlayerAttackCountChanged;
 
