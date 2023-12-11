@@ -52,5 +52,12 @@ namespace NetworkRoom
                 ServerIP = itemData[0]["IP"].ToString();
             }
         }
+
+        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
+        {
+            //CanvasUIManager.Instance
+
+            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+        }
     }
 }

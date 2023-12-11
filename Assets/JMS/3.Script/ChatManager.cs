@@ -14,18 +14,27 @@ namespace NetworkRoom
         public RectTransform chatList;
         public InputField inputMessage;
 
+        private static ChatManager Instance;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != null)
+            {
+                Destroy(this);
+            }
+        }
+
         private void Start()
         {
-            if (isServer) return;
-
             Invoke("AddListenerToSendButton", 3f);
         }
 
-        [ClientCallback]
         public void AddListenerToSendButton()
         {
-            if (!isLocalPlayer) return;
-
             GameObject obj1 = GameObject.FindGameObjectWithTag("ChatList");
             chatList = obj1.GetComponent<RectTransform>();
             GameObject obj2 = GameObject.FindGameObjectWithTag("Input");
@@ -33,28 +42,37 @@ namespace NetworkRoom
 
             GameObject obj = GameObject.FindGameObjectWithTag("Send");
             Button sendButton = obj.GetComponent<Button>();
-            sendButton.onClick.AddListener(CmdSendMessage);
+
+            //if (!isLocalPlayer) return;
+            sendButton.onClick.AddListener(SendMessage_temp);
         }
 
-        [Command]
-        public void CmdSendMessage()
+        public void SendMessage_temp()
         {
-            var obj = Instantiate(messagePrefab, chatList);
-            Text msg = obj.GetComponent<Text>();
-            msg.text = inputMessage.text;
+            if (string.IsNullOrWhiteSpace(inputMessage.text)) return;
+
+            CmdSendMessage(inputMessage.text);
+            inputMessage.text = string.Empty;
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdSendMessage(string message)
+        {
+            RPCReceiveMessgae(message);
+
             inputMessage.text = string.Empty;
 
-            NetworkServer.Spawn(obj);
-            RPCSyncMessage();
+            Debug.Log("[CmdSendMessage]");
         }
 
         [ClientRpc]
-        public void RPCSyncMessage()
+        public void RPCReceiveMessgae(string message)
         {
             var obj = Instantiate(messagePrefab, chatList);
             Text msg = obj.GetComponent<Text>();
-            msg.text = inputMessage.text;
-            inputMessage.text = string.Empty;
+            msg.text = message;
+
+            Debug.Log("[RPCReceiveMessgae]");
         }
     }
 }

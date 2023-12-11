@@ -7,7 +7,7 @@ public class CanvasUIManager : MonoBehaviour
     public RectTransform mainPanel;
     public RectTransform playersPanel;
 
-    private static CanvasUIManager Instance;
+    public static CanvasUIManager Instance;
 
     void Awake()
     {
@@ -24,6 +24,8 @@ public class CanvasUIManager : MonoBehaviour
 
     public static void SetActive(bool active)
     {
+        if (Instance == null) return;
+
         Instance.mainPanel.gameObject.SetActive(active);
     }
 

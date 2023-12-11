@@ -78,6 +78,8 @@ public class PlayerControl : NetworkBehaviour
     {
         playersList.Remove(this);
 
+        // 승리화면 출력
+
         CanvasUIManager.SetActive(false);
         DestroyLocalUI();
         DestroyGlobalUI();
@@ -244,10 +246,11 @@ public class PlayerControl : NetworkBehaviour
         animator.speed = speed;
     }
 
-    [ClientCallback]
     private void CreateLocalUI()
     {
-        _localDataManager.name = SQLManager.Instance.userInfo.ID;
+        if (!isServer && !isLocalPlayer) return;
+
+        if (!isServer) _localDataManager.name = SQLManager.Instance.userInfo.ID;
 
         localUIObject = Instantiate(localUIPrefab, CanvasUIManager.GetPlayersPanel());
         localUIManager = localUIObject.GetComponent<LocalUIManager>();
@@ -259,9 +262,10 @@ public class PlayerControl : NetworkBehaviour
         _localDataManager.InvokeAll();
     }
 
-    [ClientCallback]
     private void DestroyLocalUI()
     {
+        if (!isServer && !isLocalPlayer) return;
+
         _localDataManager.OnColorChanged -= localUIManager.OnPlayerColorChanged;
         _localDataManager.OnNameChanged -= localUIManager.OnPlayerNameChanged;
         _localDataManager.OnHitCountChanged -= localUIManager.OnPlayerHitCountChanged;
@@ -272,7 +276,7 @@ public class PlayerControl : NetworkBehaviour
 
     private void CreateGlobalUI()
     {
-        if (!isLocalPlayer) return;
+        if (!isServer && !isLocalPlayer) return;
 
         globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
         globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
@@ -282,7 +286,7 @@ public class PlayerControl : NetworkBehaviour
 
     private void DestroyGlobalUI()
     {
-        if (!isLocalPlayer) return;
+        if (!isServer && !isLocalPlayer) return;
 
         _globalDataManager.OnGameTimeChanged -= globalUIManager.OnGlobalTimeValueChanged;
 
