@@ -8,6 +8,7 @@ using NetworkRoom;
 
 public class RoomManager : MonoBehaviour
 {
+    [SerializeField] private Img_Decider decider;
 
     //private GameObject RM_Singleton;
     private NTRoomManager room_manager;
@@ -44,6 +45,7 @@ public class RoomManager : MonoBehaviour
     private void Update()
     {
         UpdateUI();
+        ImgUpdate();
         isAllReady();
         Disconnet3rdPlayer();
     }
@@ -161,6 +163,79 @@ public class RoomManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ImgUpdate()
+    {
+        if(room_manager.roomSlots.Count == 1)
+        {
+            if (p1name_Text.text == "Á¤¹Î½Ä")
+            {
+                p1img.sprite = decider.Profiles[0];
+            }
+            else if (p1name_Text.text == "¹Ú»ó¿ì")
+            {
+                p1img.sprite = decider.Profiles[1];
+            }
+            else if (p1name_Text.text == "¿ìÂùÇõ")
+            {
+                p1img.sprite = decider.Profiles[2];
+            }
+            else if (p1name_Text.text == "°í½ÂÇö")
+            {
+                p1img.sprite = decider.Profiles[3];
+            }
+            else
+            {
+                p1img.sprite = decider.Profiles[4];
+            }
+        }
+
+        if (room_manager.roomSlots.Count == 2)
+        {
+            if (p1name_Text.text == "Á¤¹Î½Ä")
+            {
+                p1img.sprite = decider.Profiles[0];
+            }
+            else if (p1name_Text.text == "¹Ú»ó¿ì")
+            {
+                p1img.sprite = decider.Profiles[1];
+            }
+            else if (p1name_Text.text == "¿ìÂùÇõ")
+            {
+                p1img.sprite = decider.Profiles[2];
+            }
+            else if (p1name_Text.text == "°í½ÂÇö")
+            {
+                p1img.sprite = decider.Profiles[3];
+            }
+            else
+            {
+                p1img.sprite = decider.Profiles[4];
+            }
+
+            if (p2name_Text.text == "Á¤¹Î½Ä")
+            {
+                p2img.sprite = decider.Profiles[0];
+            }
+            else if (p2name_Text.text == "¹Ú»ó¿ì")
+            {
+                p2img.sprite = decider.Profiles[1];
+            }
+            else if (p2name_Text.text == "¿ìÂùÇõ")
+            {
+                p2img.sprite = decider.Profiles[2];
+            }
+            else if (p2name_Text.text == "°í½ÂÇö")
+            {
+                p2img.sprite = decider.Profiles[3];
+            }
+            else
+            {
+                p2img.sprite = decider.Profiles[4];
+            }
+        }
+
     }
 
     [ServerCallback]
