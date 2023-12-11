@@ -17,6 +17,11 @@ public class SkillControl : MonoBehaviour
         ThrowLineObj.SetActive(ShowLine);
     }
 
+    private void Update()
+    {
+        Debug.Log(ShowLine);
+    }
+
     public void ShowAfterChoice()
     {
         if (ShowLine)
