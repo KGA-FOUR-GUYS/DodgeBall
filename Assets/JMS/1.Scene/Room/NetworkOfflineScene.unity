@@ -1116,11 +1116,11 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 2562260042804059685, guid: 897e466c119f63d42b2401fe21517dd5, type: 3}
+  playerPrefab: {fileID: 3096035101972956458, guid: d09efd5415c11ea4f9053c5ee9c604cf, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 8080477869815108723, guid: 2ff1fed1c7090904599f7022ee0c087e, type: 3}
+  - {fileID: 2319546239784642914, guid: 9b75b9a55b3c15149befa6f0cf0039fb, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     bufferLimit: 32
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   minPlayers: 3
   roomPlayerPrefab: {fileID: 114033720796874720, guid: deae2134a1d77704b9c595efe69767dd, type: 3}
   RoomScene: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
-  GameplayScene: Assets/BaseResources/Mirror/Examples/Room/Scenes/OnlineScene.unity
+  GameplayScene: Assets/PSW/1.Scene/GamePlayScene.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0

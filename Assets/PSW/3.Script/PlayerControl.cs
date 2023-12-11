@@ -51,7 +51,7 @@ public class PlayerControl : NetworkBehaviour
 
             //이동
             Move();
-            CMDMove();
+            //CMDMove();
 
             //오대식
             if (Input.GetKeyDown(showLaneKey))
