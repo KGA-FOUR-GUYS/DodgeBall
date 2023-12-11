@@ -24,18 +24,17 @@ namespace NetworkRoom
         GlobalUIManager globalUIManager;
         LocalUIManager localUIManager;
 
-        private void Awake()
+        private void Start()
         {
             TryGetComponent(out _globalDataManager);
             TryGetComponent(out _localDataManager);
-        }
 
-        #region Server
-
-        public override void OnStartServer()
-        {
             // Add this to the static Players List
             playersList.Add(this);
+
+            CreateLocalUI();
+            CreateGlobalUI();
+            CanvasUIManager.SetActive(true);
 
             // set the Player Color SyncVar
             _localDataManager.color = Random.ColorHSV(0f, 1f, 0.9f, 0.9f, 1f, 1f);
@@ -45,17 +44,18 @@ namespace NetworkRoom
             _localDataManager.attackCount = 0;
         }
 
-        public override void OnStopServer()
+        private void OnDestroy()
         {
             playersList.Remove(this);
+
+            CanvasUIManager.SetActive(false);
+            DestroyLocalUI();
+            DestroyGlobalUI();
         }
 
-		#endregion
-
-		#region Client
-
-		public override void OnStartClient()
-		{
+        [ClientCallback]
+        private void CreateLocalUI()
+        {
             _localDataManager.name = SQLManager.Instance.userInfo.ID;
 
             localUIObject = Instantiate(localUIPrefab, CanvasUIManager.GetPlayersPanel());
@@ -68,27 +68,9 @@ namespace NetworkRoom
             _localDataManager.InvokeAll();
         }
 
-		public override void OnStartLocalPlayer()
-        {   
-            globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
-            globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
-
-            _globalDataManager.OnGameTimeChanged += globalUIManager.OnGlobalTimeValueChanged;
-            
-            CanvasUIManager.SetActive(true);
-        }
-
-        public override void OnStopLocalPlayer()
+        [ClientCallback]
+        private void DestroyLocalUI()
         {
-            CanvasUIManager.SetActive(false);
-
-            _globalDataManager.OnGameTimeChanged -= globalUIManager.OnGlobalTimeValueChanged;
-
-            Destroy(globalUIObject);
-        }
-
-		public override void OnStopClient()
-		{
             _localDataManager.OnColorChanged -= localUIManager.OnPlayerColorChanged;
             _localDataManager.OnNameChanged -= localUIManager.OnPlayerNameChanged;
             _localDataManager.OnHitCountChanged -= localUIManager.OnPlayerHitCountChanged;
@@ -97,6 +79,23 @@ namespace NetworkRoom
             Destroy(localUIObject);
         }
 
-		#endregion
+        private void CreateGlobalUI()
+        {
+            if (!isLocalPlayer) return;
+
+            globalUIObject = Instantiate(globalUIPrefab, CanvasUIManager.GetMainPanel());
+            globalUIManager = globalUIObject.GetComponent<GlobalUIManager>();
+
+            _globalDataManager.OnGameTimeChanged += globalUIManager.OnGlobalTimeValueChanged;
+        }
+
+        private void DestroyGlobalUI()
+        {
+            if (!isLocalPlayer) return;
+
+            _globalDataManager.OnGameTimeChanged -= globalUIManager.OnGlobalTimeValueChanged;
+
+            Destroy(globalUIObject);
+        }
 	}
 }

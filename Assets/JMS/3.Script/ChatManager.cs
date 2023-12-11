@@ -16,11 +16,16 @@ namespace NetworkRoom
 
         private void Start()
         {
-            AddListenerToSendButton();
+            if (isServer) return;
+
+            Invoke("AddListenerToSendButton", 3f);
         }
 
+        [ClientCallback]
         public void AddListenerToSendButton()
         {
+            if (!isLocalPlayer) return;
+
             GameObject obj1 = GameObject.FindGameObjectWithTag("ChatList");
             chatList = obj1.GetComponent<RectTransform>();
             GameObject obj2 = GameObject.FindGameObjectWithTag("Input");
@@ -29,8 +34,6 @@ namespace NetworkRoom
             GameObject obj = GameObject.FindGameObjectWithTag("Send");
             Button sendButton = obj.GetComponent<Button>();
             sendButton.onClick.AddListener(CmdSendMessage);
-
-            //CmdSendMessage();
         }
 
         [Command]
@@ -41,8 +44,7 @@ namespace NetworkRoom
             msg.text = inputMessage.text;
             inputMessage.text = string.Empty;
 
-            //NetworkServer.Spawn(obj, gameObject);
-
+            NetworkServer.Spawn(obj);
             RPCSyncMessage();
         }
 
