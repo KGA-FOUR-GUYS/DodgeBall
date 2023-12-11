@@ -8,13 +8,17 @@ using NetworkRoom;
 
 public class RoomManager : MonoBehaviour
 {
+    [SerializeField] private Img_Decider decider;
+
     //private GameObject RM_Singleton;
     private NTRoomManager room_manager;
 
     private GameObject P1Slot;
+    private MynameManager P1name;
     private NetworkRoomPlayer P1Component;
 
     private GameObject P2Slot;
+    private MynameManager P2name;
     private NetworkRoomPlayer P2Component;
 
     [SerializeField] private Text p1name_Text;
@@ -41,6 +45,7 @@ public class RoomManager : MonoBehaviour
     private void Update()
     {
         UpdateUI();
+        ImgUpdate();
         isAllReady();
         Disconnet3rdPlayer();
     }
@@ -60,6 +65,7 @@ public class RoomManager : MonoBehaviour
         {
             P1Slot = room_manager.roomSlots[0].gameObject;
             P1Component = P1Slot.GetComponent<NetworkRoomPlayer>();
+            P1name = P1Slot.GetComponent<MynameManager>();
 
             p1name_Text.enabled = true;
             p1img.enabled = true;
@@ -72,7 +78,8 @@ public class RoomManager : MonoBehaviour
             {
                 p1Ready.text = string.Empty;
             }
-            p1name_Text.text = $"Player[{P1Component.index}]";
+            //p1name_Text.text = $"Player[{P1Component.index}]";
+            p1name_Text.text = P1name.myname;
 
             p2name_Text.enabled = false;
             p2img.enabled = false;
@@ -83,6 +90,7 @@ public class RoomManager : MonoBehaviour
         {
             P1Slot = room_manager.roomSlots[0].gameObject;
             P1Component = P1Slot.GetComponent<NetworkRoomPlayer>();
+            P1name = P1Slot.GetComponent<MynameManager>();
 
             p1name_Text.enabled = true;
             p1img.enabled = true;
@@ -95,12 +103,14 @@ public class RoomManager : MonoBehaviour
             {
                 p1Ready.text = string.Empty;
             }
-            p1name_Text.text = $"Player[{P1Component.index}]";
+            //p1name_Text.text = $"Player[{P1Component.index}]";
+            p1name_Text.text = P1name.myname;
 
 
 
             P2Slot = room_manager.roomSlots[1].gameObject;
             P2Component = P2Slot.GetComponent<NetworkRoomPlayer>();
+            P2name = P2Slot.GetComponent<MynameManager>();
 
             p2name_Text.enabled = true;
             p2img.enabled = true;
@@ -113,7 +123,8 @@ public class RoomManager : MonoBehaviour
             {
                 p2Ready.text = string.Empty;
             }
-            p2name_Text.text = $"Player[{P2Component.index}]";
+            //p2name_Text.text = $"Player[{P2Component.index}]";
+            p2name_Text.text = P2name.myname;
 
         }
         else
@@ -152,6 +163,79 @@ public class RoomManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ImgUpdate()
+    {
+        if(room_manager.roomSlots.Count == 1)
+        {
+            if (p1name_Text.text == "Á¤¹Î½Ä")
+            {
+                p1img.sprite = decider.Profiles[0];
+            }
+            else if (p1name_Text.text == "¹Ú»ó¿ì")
+            {
+                p1img.sprite = decider.Profiles[1];
+            }
+            else if (p1name_Text.text == "¿ìÂùÇõ")
+            {
+                p1img.sprite = decider.Profiles[2];
+            }
+            else if (p1name_Text.text == "°í½ÂÇö")
+            {
+                p1img.sprite = decider.Profiles[3];
+            }
+            else
+            {
+                p1img.sprite = decider.Profiles[4];
+            }
+        }
+
+        if (room_manager.roomSlots.Count == 2)
+        {
+            if (p1name_Text.text == "Á¤¹Î½Ä")
+            {
+                p1img.sprite = decider.Profiles[0];
+            }
+            else if (p1name_Text.text == "¹Ú»ó¿ì")
+            {
+                p1img.sprite = decider.Profiles[1];
+            }
+            else if (p1name_Text.text == "¿ìÂùÇõ")
+            {
+                p1img.sprite = decider.Profiles[2];
+            }
+            else if (p1name_Text.text == "°í½ÂÇö")
+            {
+                p1img.sprite = decider.Profiles[3];
+            }
+            else
+            {
+                p1img.sprite = decider.Profiles[4];
+            }
+
+            if (p2name_Text.text == "Á¤¹Î½Ä")
+            {
+                p2img.sprite = decider.Profiles[0];
+            }
+            else if (p2name_Text.text == "¹Ú»ó¿ì")
+            {
+                p2img.sprite = decider.Profiles[1];
+            }
+            else if (p2name_Text.text == "¿ìÂùÇõ")
+            {
+                p2img.sprite = decider.Profiles[2];
+            }
+            else if (p2name_Text.text == "°í½ÂÇö")
+            {
+                p2img.sprite = decider.Profiles[3];
+            }
+            else
+            {
+                p2img.sprite = decider.Profiles[4];
+            }
+        }
+
     }
 
     [ServerCallback]
