@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 namespace NetworkRoom
 {
-    public class RoomManager : NetworkRoomManager
+    public class NTRoomManager : NetworkRoomManager
     {
-        public static RoomManager Instance { get; private set; }
+        public static NTRoomManager Instance { get; private set; }
         public string ServerIP { get; set; }
 
         private string path;

@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/BaseResources/Mirror/Examples/Room/Scenes/OnlineScene.unity
     guid: d7a6763559b31854586c9e49916273ef
+  - enabled: 1
+    path: Assets/WCH/1.Scene/Sam/OfflineScene_Sam.unity
+    guid: 5e059651ee31d104eafb6906789b72ba
+  - enabled: 1
+    path: Assets/WCH/1.Scene/Sam/OnlineScene_Sam.unity
+    guid: eb89b10cb83fbbd4ebf7dba59fbb12d5
+  - enabled: 1
+    path: Assets/WCH/1.Scene/Sam/RoomScene_Sam.unity
+    guid: a66c9dd34b402fe489e2b6757ad4d08e
   m_configObjects: {}

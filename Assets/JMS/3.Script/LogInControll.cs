@@ -12,12 +12,12 @@ namespace NetworkRoom
         public InputField inputPW;
         public Text txtLog;
 
-        [SerializeField] private RoomManager _roomManager;
+        [SerializeField] private NTRoomManager _roomManager;
 
 
         private void Awake()
         {
-            _roomManager = FindObjectOfType<RoomManager>();
+            _roomManager = FindObjectOfType<NTRoomManager>();
         }
 
 #if UNITY_SERVER

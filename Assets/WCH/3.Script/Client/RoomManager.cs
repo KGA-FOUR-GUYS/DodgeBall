@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using Mirror.Examples.NetworkRoom;
+using NetworkRoom;
 
 public class RoomManager : MonoBehaviour
 {
     //private GameObject RM_Singleton;
-    private NetworkRoomManagerExt room_manager;
+    private NTRoomManager room_manager;
 
     private GameObject P1Slot;
     private NetworkRoomPlayer P1Component;
@@ -29,10 +30,9 @@ public class RoomManager : MonoBehaviour
 
     private void Start()
     {
-        
         //RM_Singleton = GameObject.Find("NetworkRoomManager");
         //room_manager = RM_Singleton.GetComponent<NetworkRoomManagerExt>();
-        room_manager = NetworkRoomManagerExt.singleton;
+        room_manager = NTRoomManager.Instance;
         CountDown_co = null;
         ReadyBtn.gameObject.SetActive(true);
         CountDown_Text.enabled = false;
