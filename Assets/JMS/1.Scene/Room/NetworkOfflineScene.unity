@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   runInBackground: 1
-  autoStartServerBuild: 0
+  autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 120
   offlineScene: Assets/JMS/1.Scene/Room/NetworkOfflineScene.unity
@@ -2207,7 +2207,7 @@ MonoBehaviour:
   inputID: {fileID: 1979079985}
   inputPW: {fileID: 957929700}
   txtLog: {fileID: 1668194714}
-  _roomManager: {fileID: 0}
+  _roomManager: {fileID: 1127476953}
 --- !u!1 &1876056658
 GameObject:
   m_ObjectHideFlags: 0
